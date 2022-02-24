@@ -8,24 +8,16 @@
 import UIKit
 
 protocol TableViewCellDelegate {
-    func deleteButton(indexPathRow: Int)
+    func deleteButton()
 }
 
 class TableViewCell: UITableViewCell {
     
-    @IBOutlet private weak var titleLabel: UILabel!
-    
     var delegate: TableViewCellDelegate?
-    var indexPathRow = 0
 
     @IBAction func deleteButton(_ sender: Any) {
-        delegate?.deleteButton(indexPathRow: indexPathRow)
+        delegate?.deleteButton()
     }
-    
-    func configure(title: String) {
-        titleLabel.text = title
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
