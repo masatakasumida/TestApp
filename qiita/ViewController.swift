@@ -11,6 +11,8 @@ class ViewController: UIViewController {
     
     var itemArray = ["cell 1","cell 2","cell 3"]
     
+    @IBOutlet weak var tableView: UITableView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +25,11 @@ class ViewController: UIViewController {
        }
 }
 
-extension ViewController:UITableViewDelegate,UITableViewDataSource {
+extension ViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         itemArray.count
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //tableViewの内容を指定
@@ -44,9 +47,20 @@ extension ViewController: TableViewCellDelegate {
         print("キャンセル")
     }
     let okAction: UIAlertAction = UIAlertAction(title: "削除", style: .destructive) { (UIAlertAction) in
-// customCellを削除したい!!
-        print("削除されました")
-    }
+        self.tableView.beginUpdates()
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "customCell",for: indexPath) as! TableViewCell
+            self.itemArray.remove(at: indexPath.row)
+            
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            self.tableView.reloadData()
+            self.tableView.endUpdates()
+            return cell
+        }
+        print(self.itemArray)
+}
     alert.addAction(okAction)
     alert.addAction(canselAction)
     present(alert, animated: true, completion: nil)
